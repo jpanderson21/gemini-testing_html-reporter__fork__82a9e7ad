@@ -5,7 +5,7 @@ import {mapValues, isObject, omitBy, isEmpty} from 'lodash';
 import React, {ReactNode} from 'react';
 import {connect} from 'react-redux';
 
-import {isUrl, getUrlWithBase, getRelativeUrl} from '@/common-utils';
+import {isUrl, getUrlWithBase} from '@/common-utils';
 import {ResultEntity, State} from '@/static/new-ui/types/store';
 import {HtmlReporterValues} from '@/plugin-api';
 import {ReporterConfig} from '@/types';
@@ -65,10 +65,10 @@ function MetaInfoInternal(props: MetaInfoInternalProps): ReactNode {
 
     const metaInfoItemsWithResolvedUrls = metaInfoItems.map((item) => {
         if (item.label === 'url' || metaInfoBaseUrls[item.label] === 'auto') {
-            const url = getUrlWithBase(getRelativeUrl(item.content), baseHost);
+            const url = getUrlWithBase(item.content, baseHost);
             return {
                 label: item.label,
-                content: getRelativeUrl(item.content),
+                content: item.content,
                 url,
                 copyText: url
             };
@@ -104,8 +104,8 @@ function MetaInfoInternal(props: MetaInfoInternalProps): ReactNode {
     if (!hasUrlMetaInfoItem && result.suiteUrl) {
         metaInfoItemsWithResolvedUrls.push({
             label: 'url',
-            content: getRelativeUrl(result.suiteUrl),
-            url: getUrlWithBase(getRelativeUrl(result.suiteUrl), baseHost)
+            content: result.suiteUrl,
+            url: getUrlWithBase(result.suiteUrl, baseHost)
         });
     }
 
